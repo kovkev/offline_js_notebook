@@ -11,8 +11,10 @@
     "test:coverage": "cross-env BABEL_ENV= NODE_ENV=test nyc --reporter=lcov --reporter=text-summary mocha --require @babel/register \"tests/**/*.tests.js\"",
     "test:watch": "npm test -- --watch",
     "docs": "jsdoc --readme README.md ./lib/*.js -d ./docs && jsdoc2md ./lib/*.js > ./api.md",
-    "build": "npm run build:merge && babel ./dist/index.js --out-dir ./dist --source-maps",
+    "build": "npm run build:merge && babel ./dist/index.js --out-dir ./dist --source-maps && npm run bin_build",
+    "bin_build": "npm run bin_build:merge && babel ./dist/bin_index.js --out-dir ./dist --source-maps",
     "build:merge": "rm -rf ./dist/** && rollup lib/index.js --file dist/index.js --format 'cjs'",
+    "bin_build:merge": "rm -rf ./dist/bin_build** && rollup lib/bin_index.js --file dist/bin_index.js --format 'cjs'",
     "build:min": "minify ./dist/index.js --out-file ./dist/index.min.js --mangle.keepFnName --mangle.keepClassName --",
     "build:full": "npm run docs && npm run build && npm run build:min",
     "build:ci": "npm run lint && npm run test && npm run build:full"
@@ -68,10 +70,15 @@
     "cross-env": "^6.0.3",
     "jsdoc": "^3.6.6",
     "jsdoc-to-markdown": "^5.0.3",
-    "rollup": "^2.30.0",
     "mocha": "^7.2.0",
     "nyc": "^15.1.0",
+    "rollup": "^2.30.0",
     "snazzy": "^8.0.0",
     "standard": "^14.3.4"
+  },
+  "bin": "./dist/server.js",
+  "dependencies": {
+    "codemirror": "^5.58.2",
+    "express": "^4.17.1"
   }
 }
